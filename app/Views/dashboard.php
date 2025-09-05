@@ -103,42 +103,38 @@
                         <h3 class="card-title">Controlling AC</h3>
                     </div>
                     <div class="card-body text-center">
-                        <input type="hidden" id="csrf_token" name="<?= csrf_token() ?>" value="<?= csrf_hash() ?>">
-                        <input type="checkbox" class="relay-switch" name="relay" data-bootstrap-switch data-off-color="danger"
-                            data-id="<?= $lampu['id'] ?>" data-on-color="success" <?= $lampu['status'] ? 'checked' : '' ?>>
-                        <input type="checkbox" 
-                            class="relay-switch" 
-                            name="relay" 
-                            data-bootstrap-switch 
-                            data-off-color="danger"
-                            data-id="<?= $lampu['id'] ?>" 
-                            data-on-color="success" 
-                            data-on-value="1"
-                            data-off-value="0"
-                            <?= $lampu['status'] ? 'checked' : '' ?>>
+                    <input type="hidden" id="csrf_token" name="<?= csrf_token() ?>" value="<?= csrf_hash() ?>">
 
-                        <script>
-                            $('.relay-switch').on('switchChange.bootstrapSwitch', function (event, state) {
-                            let id = $(this).data('id');
-                            let onValue = $(this).data('on-value');
-                            let offValue = $(this).data('off-value');
+                <input type="checkbox" 
+                    class="relay-switch" 
+                    name="relay" 
+                    data-bootstrap-switch 
+                    data-id="AC1"
+                    data-off-color="danger"
+                    data-on-color="success">
 
-                            let value = state ? onValue : offValue;
-                        
-                            $.ajax({
-                                url: '/relay/update',
-                                type: 'POST',
-                                data: {
-                                    id: id,
-                                    value: value,
-                                    csrf_token: $('#csrf_token').val()
-                                },
-                                success: function (response) {
-                                    console.log("Updated:", response);
-                                }
-                            });
-                        });
-                        </script>
+                <script>
+                $('.relay-switch').on('switchChange.bootstrapSwitch', function (event, state) {
+                    let id = $(this).data('id');
+
+                    $.ajax({
+                        url: '/relay/update-status',
+                        type: 'POST',
+                        data: {
+                            id: id,
+                            status: state ? 1 : 0,
+                            csrf_token: $('#csrf_token').val()
+                        },
+                        success: function (response) {
+                            console.log("Updated:", response);
+                            if (response.csrfToken) {
+                                $('#csrf_token').val(response.csrfToken);
+                            }
+                        }
+                    });
+                });
+                </script>
+
                         <hr>
                         <div class="timer-setting mt-3">
                             <label for="ac-timer" class="mb-2"><b>Timer AC (menit)</b></label>

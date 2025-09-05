@@ -99,4 +99,13 @@ class Relay extends BaseController
             'csrfToken' => csrf_hash() // kirim token baru
         ]);
     }
+
+    public function getStatus($id)
+    {
+    $url = "http://ip-esp32/status?id=" . $id;
+    $json = file_get_contents($url);
+    return json_decode($json, true);
+    }
+
+
 }

@@ -32,6 +32,7 @@ $routes->get('/json/harga-air', 'Kamar::jsonHargaAir');
 $routes->get('/api/pzem-data', 'Recievedata::index');
 $routes->get('/api/total-bayar', 'Recievedata::totalHarga');
 $routes->get('/api/relay/(:segment)', 'Recievedata::relay/$1');
+$routes->get('/relay/getStatus/(:num)', 'Relay::getStatus/$1');
 
 $routes->post('voice-command/process', 'VoiceCommand::process');
 $routes->get('voice-command', function () {
