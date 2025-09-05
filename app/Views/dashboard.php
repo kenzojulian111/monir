@@ -106,6 +106,39 @@
                         <input type="hidden" id="csrf_token" name="<?= csrf_token() ?>" value="<?= csrf_hash() ?>">
                         <input type="checkbox" class="relay-switch" name="relay" data-bootstrap-switch data-off-color="danger"
                             data-id="<?= $lampu['id'] ?>" data-on-color="success" <?= $lampu['status'] ? 'checked' : '' ?>>
+                        <input type="checkbox" 
+                            class="relay-switch" 
+                            name="relay" 
+                            data-bootstrap-switch 
+                            data-off-color="danger"
+                            data-id="<?= $lampu['id'] ?>" 
+                            data-on-color="success" 
+                            data-on-value="1"
+                            data-off-value="0"
+                            <?= $lampu['status'] ? 'checked' : '' ?>>
+
+                        <script>
+                            $('.relay-switch').on('switchChange.bootstrapSwitch', function (event, state) {
+                            let id = $(this).data('id');
+                            let onValue = $(this).data('on-value');
+                            let offValue = $(this).data('off-value');
+
+                            let value = state ? onValue : offValue;
+                        
+                            $.ajax({
+                                url: '/relay/update',
+                                type: 'POST',
+                                data: {
+                                    id: id,
+                                    value: value,
+                                    csrf_token: $('#csrf_token').val()
+                                },
+                                success: function (response) {
+                                    console.log("Updated:", response);
+                                }
+                            });
+                        });
+                        </script>
                         <hr>
                         <div class="timer-setting mt-3">
                             <label for="ac-timer" class="mb-2"><b>Timer AC (menit)</b></label>
